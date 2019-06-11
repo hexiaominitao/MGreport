@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}{{title}}{% endblock %}
+{% block button %}
+<div>{{ title }}</div>
+{% endblock %}
+{% block content %}
+
+<div class="mdui-table-fluid">
+    <form method="post">
+        <table class="mdui-table mdui-table-hoverable">
+            <thead>
+            <tr>
+                <th>
+                    <label class="mdui-checkbox">
+                        <input type="checkbox" class="select-all"/>
+                        <i class="mdui-checkbox-icon"></i>
+                    </label>
+                </th>
+                <th>样本编号</th>
+                <th>stat(Q30)</th>
+                <th>snv</th>
+                <th>cnv</th>
+                <th>sv</th>
+                <th>germline_total</th>
+                <th>germline_filter</th>
+                <th>化疗</th>
+                <th>状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in status %}
+            <tr>
+                <td>
+                    <label class="mdui-checkbox">
+                        <input type="checkbox" class="item" name="check" value="{{row.id}}"/>
+                        <i class="mdui-checkbox-icon"></i>
+                    </label>
+                </td>
+                <td>{{ row.Sample_name }}</td>
+                <td><a href="{{ url_for('result_bp.stat_detail',filename=row.Sample_name) }}">
+                    {{ row.stat }}
+                </a></td>
+                <td><a href="{{ url_for('result_bp.snv_detail',filename=row.Sample_name,stat=stat) }}">
+                    {{ row.snv }}
+                </a></td>
+                <td><a href="{{ url_for('result_bp.cnv_detail',filename=row.Sample_name) }}">
+                    {{ row.cnv }}
+                </a></td>
+                </td>
+                <td><a
+                        href="{{ url_for('result_bp.sv_no_detail',filename=row.Sample_name) }}">
+                    {{ row.sv_no }}
+                </a>
+                <td>{{ row.germline_total }}</td>
+                <td>{{ row.germline_filter }}</td>
+                <td><a href="{{ url_for('result_bp.chem_detail',filename=row.Sample_name) }}">
+                    {{ row.chem }}
+                </a></td>
+                <td>{{ row.status }}</td>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" name="pass" value="{{button_name}}">
+        <input type="submit" name="npass" value="{{button_name_n}}">
+    </form>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    var all_select = document.querySelector('.select-all');
+    var items = document.querySelectorAll('.item');
+    all_select.onclick = function () {
+        if (all_select.checked) {
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = false;
+            }
+        }
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}结果文件{% endblock %}
+{% block button %}
+<a href="{{ url_for('result_bp.file_manager') }}">上传文件</a>
+<a href="{{ url_for('result_bp.file_manager_re') }}">结果文件</a>
+{% endblock %}
+{% block content %}
+<div class="col s9">
+    <h4>结果文件</h4>
+    <div class="mdui-table-fluid ">
+        <table class="mdui-table mdui-table-hoverable">
+            <thead>
+            <tr>
+                <th>文件名</th>
+                <th>下载</th>
+                <th>删除</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for file in filelist %}
+            <tr>
+                <td>{{ file }}</td>
+                <td><a href="{{ url_for('result_bp.download_re',filename=file) }}">下载</a></td>
+                <td><a href="{{ url_for('result_bp.delate_re',filename=file) }}">删除</a></td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

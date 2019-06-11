@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}详情{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/result/snv.css') }}">
+{% endblock %}
+{% block content %}
+<div class="mdui-table-fluid">
+    <form method="post">
+        <table class="mdui-table mdui-table-hoverable">
+            <thead>
+            <tr>
+                <th>
+                    <label class="mdui-checkbox">
+                        <input type="checkbox" class="select-all"/>
+                        <i class="mdui-checkbox-icon"></i>
+                    </label>
+                </th>
+                {% for row in keys %}
+                <th colspan="1">{{ row }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in kkey %}
+            <tr>
+                <td>
+                    <label class="mdui-checkbox">
+                        <input type="checkbox" class="item" name="check" value="{{row.sam_id}}"/>
+                        <i class="mdui-checkbox-icon"></i>
+                    </label>
+                </td>
+                {% for value in get_val(dic,row) %}
+                <td colspan="1">{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" name="cancel" value="审核通过">
+        <input type="submit" name="check_f" value="审核不通过">
+    </form>
+</div>
+{% endblock %}
+{% block js %}
+<script>
+    var all_select = document.querySelector('.select-all');
+    var items = document.querySelectorAll('.item');
+    all_select.onclick = function () {
+        if (all_select.checked) {
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = false;
+            }
+        }
+    }
+</script>
+{% endblock %}

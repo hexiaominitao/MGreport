@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="mdui-col-xs-6 mdui-col-offset-md-3">
+    <form method="post">
+        {{ form.hidden_tag() }}
+        <div class="mdui-textfield">
+            {{ form.username.label }}
+            {% if form.username.errors %}
+            {% for e in form.username.errors %}
+            <p data-error="wrong" data-success="right">{{ e }}</p>
+            {% endfor %}
+            {% endif %}
+            {{ form.username(class_='mdui-textfield-input') }}
+        </div>
+        <div class="mdui-textfield">
+            {{ form.password.label }}
+            {% if form.password.errors %}
+            {% for e in form.password.errors %}
+            <p data-error="wrong" data-success="right">{{ e }}</p>
+            {% endfor %}
+            {% endif %}
+            {{ form.password(class_='mdui-textfield-input') }}
+        </div>
+        <input type="submit" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent" value="登录">
+    </form>
+</div>
+{% endblock %}

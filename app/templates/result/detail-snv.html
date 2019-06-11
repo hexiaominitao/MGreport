@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% block title %}详情{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/result/snv.css') }}">
+{% endblock %}
+{% block content %}
+{% if stat in list_stat %}
+<div class="mdui-table-fluid">
+    <form method="post">
+        <table class="mdui-table mdui-table-hoverable">
+            <thead>
+            <tr>
+                {% for row in data_k %}
+                <th>{{ row }}</th>
+                {% endfor %}
+                <th>状态</th>
+                <th>备注</th>
+            </tr>
+
+            </thead>
+            <tbody>
+            {% for row in status %}
+            <tr>
+                {% for key in data_v %}
+                <td>{{ row[key] }}</td>
+                {% endfor %}
+                <td>{{ row.status }}</td>
+                <td>{{ row.note }}</td>
+            </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </form>
+</div>
+{% else %}
+<div class="mdui-table-fluid">
+    <form method="post">
+        <table class="mdui-table mdui-table-hoverable">
+            <thead>
+            <tr>
+                <th>
+                    <label class="mdui-checkbox">
+                        <input type="checkbox" class="select-all"/>
+                        <i class="mdui-checkbox-icon"></i>
+                    </label>
+                </th>
+                <th>状态</th>
+                <th>备注</th>
+                {% for row in data_k %}
+                <th>{{ row }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in status %}
+            <tr>
+                <td>
+                    <label class="mdui-checkbox">
+                        <input type="checkbox" class="item" name="check" value="{{row.id}}"/>
+                        <i class="mdui-checkbox-icon"></i>
+                    </label>
+                </td>
+                <td>{{ row.status }}</td>
+                <td><input type="text" name="note" placeholder="{{ row.note }}" class="mdui-textfield-input">
+                </td>
+                {% for key in data_v %}
+                <th>{{ row[key] }}</th>
+                {% endfor %}
+                <!--<td>{{ row.Start }}</td>-->
+                <!--<td>{{ row.GenerefGene }}</td>-->
+                <!--<td>{{ row.gnomAD_exome_EAS }}</td>-->
+                <!--<td>{{ row.gnomAD_genome_EAS }}</td>-->
+                <!--<td>{{ row._1000g2015aug_eas }}</td>-->
+                <!--<td>{{ row.esp6500siv2_all }}</td>-->
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <input type="submit" name="pass" value="审核通过">
+        <input type="submit" name="npass" value="审核不通过">
+    </form>
+</div>
+{% endif %}
+{% endblock %}
+{% block js %}
+<script>
+    var all_select = document.querySelector('.select-all');
+    var items = document.querySelectorAll('.item');
+    all_select.onclick = function () {
+        if (all_select.checked) {
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = true;
+            }
+        } else {
+            for (var i = 0; i < items.length; i++) {
+                items[i].checked = false;
+            }
+        }
+    }
+</script>
+{% endblock %}

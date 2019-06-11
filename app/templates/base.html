@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}-报告系统</title>
+    <!--mdui.css-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='mdui/css/mdui.min.css') }}">
+    <!--图标-->
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='mdui/icons/material-icons/MaterialIcons-Regular.woff') }}">
+    <!--字体-->
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='mdui/fonts/roboto/Roboto-Black.woff') }}">
+    {% block head %}{% endblock %}
+</head>
+<body class="mdui-drawer-body-left mdui-appbar-with-toolbar  mdui-theme-primary-indigo mdui-theme-accent-pink">
+<header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar mdui-color-theme">
+        <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white"
+              mdui-drawer="{target: '#main-drawer', swipe: true}"><i class="mdui-icon material-icons">menu</i></span>
+        <a href="{{ url_for('result_bp.index_re') }}" class="mdui-typo-headline mdui-hidden-xs">MyGene</a>
+        <a href="{{ url_for('result_bp.file_index') }}" class="mdui-typo-headline mdui-hidden-xs">文件管理</a>
+        <!--<a href="{{ url_for('result_bp.upload_re') }}" class="mdui-typo-headline mdui-hidden-xs">文件上传</a>-->
+
+
+        <div class="mdui-toolbar-spacer"></div>
+        {% if current_user.is_authenticated %}
+        <a href="#">{{ current_user.username }}</a>
+        <a href="{{ url_for('user_bp.logout') }}">注销</a>
+        {% else %}
+        <a href="{{ url_for('user_bp.login') }}">登录</a>
+        <a href="{{ url_for('user_bp.register') }}">注册</a>
+        {% endif %}
+    </div>
+</header>
+
+<div class="mdui-drawer" id="main-drawer">
+    <div class="mdui-list" mdui-collapse="{accordion: true}" style="margin-bottom: 76px;">
+
+        <div class="mdui-collapse-item mdui-collapse-item-open">
+            <div class="mdui-collapse-item-header mdui-list-item mdui-ripple">
+                <i class="mdui-list-item-icon mdui-icon material-icons mdui-text-color-deep-orange">layers</i>
+                <div class="mdui-list-item-content"><a href="{{ url_for('result_bp.index_re') }}">结&nbsp&nbsp果</a></div>
+                <i class="mdui-collapse-item-arrow mdui-icon material-icons">keyboard_arrow_down</i>
+            </div>
+            <div class="mdui-collapse-item-body mdui-list">
+                <!--<a href="" class="mdui-list-item mdui-ripple">上机信息</a>-->
+                <a href="{{ url_for('result_bp.review_first') }}" class="mdui-list-item mdui-ripple ">一审</a>
+                <a href="{{ url_for('result_bp.review_second') }}" class="mdui-list-item mdui-ripple ">二审</a>
+                <a href="{{ url_for('result_bp.review_third') }}" class="mdui-list-item mdui-ripple ">三审</a>
+                <a href="{{ url_for('result_bp.result_export') }}" class="mdui-list-item mdui-ripple ">结果导出</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mdui-toolbar mdui-shadow-5">
+    <span class="mdui-typo-title">{% block page %}{% endblock %}</span>
+    {% block button %}{% endblock %}
+    <div class="mdui-toolbar-spacer"></div>
+    <a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i></a>
+    <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">refresh</i></a>-->
+    <!--<a href="javascript:;" class="mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">more_vert</i></a>-->
+</div>
+<a class="mdui-fab mdui-fab-fixed mdui-ripple" href="{{ url_for('result_bp.upload_re') }}"><i class="mdui-icon material-icons">file_upload</i></a>
+<!--<a class="mdui-fab mdui-fab-fixed" href="{{ url_for('result_bp.upload_re') }}"><i class="mdui-icon material-icons">file_upload</i></a>-->
+{% block content %}{% endblock %}
+<!--jquery-2.1.1-->
+<script type="text/javascript" src="{{ url_for('static', filename='mdui/js/jquery-2.1.1.min.js') }}"></script>
+<!--mdui.js-->
+<script type="text/javascript" src="{{ url_for('static', filename='mdui/js/mdui.min.js') }}"></script>
+{% block js %}
+{% endblock %}
+</body>
+</html>
