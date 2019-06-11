@@ -19,6 +19,7 @@ result_bp = Blueprint('result_bp', __name__,
 
 
 @result_bp.route('/', methods=['POST', 'GET'])
+@login_required
 def index_re():
     form = CountReForm()
     check_form = StartCheck()
@@ -79,6 +80,7 @@ def index_re():
 
 
 @result_bp.route('/review/first/', methods=['GET', 'POST'])
+@login_required
 def review_first():
     df = {
         'status': SampleStat.query.filter(SampleStat.status == '开始审核').all()
@@ -108,6 +110,7 @@ def review_first():
 
 
 @result_bp.route('/review/second/', methods=['GET', 'POST'])
+@login_required
 def review_second():
     df = {
         'status': SampleStat.query.filter(SampleStat.status == '开始二审').all()
@@ -138,6 +141,7 @@ def review_second():
 
 
 @result_bp.route('/review/third/', methods=['GET', 'POST'])
+@login_required
 def review_third():
     df = {
         'status': SampleStat.query.filter(SampleStat.status == '开始三审').all()
@@ -167,6 +171,7 @@ def review_third():
 
 
 @result_bp.route('/result_export/', methods=['GET', 'POST'])
+@login_required
 def result_export():
     df = {
         'status': SampleStat.query.filter(SampleStat.status == '审核完成').order_by(SampleStat.id.desc()).all()
@@ -222,6 +227,7 @@ def file_manager():
 
 
 @result_bp.route('/download/upload/<filename>/', methods=['POST', 'GET'])
+@login_required
 def download(filename):
     path_result = os.path.join(os.getcwd(), current_app.config['UPLOADED_FILERESULT_DEST'])
     return send_from_directory(path_result, filename, as_attachment=True)
@@ -237,6 +243,7 @@ def file_manager_re():
 
 
 @result_bp.route('/download/result/<filename>/', methods=['POST', 'GET'])
+@login_required
 def download_re(filename):
     path_result = os.path.join(os.getcwd(), current_app.config['EXPORT_DEST'])
     return send_from_directory(path_result, filename, as_attachment=True)
@@ -261,6 +268,7 @@ def delate(filename):
 
 
 @result_bp.route('/detail/stat/<filename>/', methods=['GET', 'POST'])
+@login_required
 def stat_detail(filename):
     count_dir = current_app.config['UPLOADED_FILERESULT_DEST']
     file_name = os.path.join(os.getcwd(), count_dir, '{}.xlsx'.format(filename))
@@ -278,6 +286,7 @@ def stat_detail(filename):
 
 
 @result_bp.route('/detail/snv/<filename>/<int:stat>', methods=['GET', 'POST'])
+@login_required
 def snv_detail(filename, stat):
     dic_stat = {0: '', 1: '开始审核', 2: '一审通过', 3: '二审通过', 4: '审核完成'}
     if stat == 1:
@@ -336,6 +345,7 @@ def snv_detail(filename, stat):
 
 
 @result_bp.route('/detail/cnv/<filename>/', methods=['GET', 'POST'])
+@login_required
 def cnv_detail(filename):
     count_dir = current_app.config['UPLOADED_FILERESULT_DEST']
     file_name = os.path.join(os.getcwd(), count_dir, '{}.xlsx'.format(filename))
@@ -358,6 +368,7 @@ def cnv_detail(filename):
 
 
 @result_bp.route('/detail/sv_no/<filename>/', methods=['GET', 'POST'])
+@login_required
 def sv_no_detail(filename):
     count_dir = current_app.config['UPLOADED_FILERESULT_DEST']
     file_name = os.path.join(os.getcwd(), count_dir, '{}.xlsx'.format(filename))
@@ -380,6 +391,7 @@ def sv_no_detail(filename):
 
 
 @result_bp.route('/detail/chem/<filename>/', methods=['GET', 'POST'])
+@login_required
 def chem_detail(filename):
     count_dir = current_app.config['UPLOADED_FILERESULT_DEST']
     file_name = os.path.join(os.getcwd(), count_dir, '{}.xlsx'.format(filename))
