@@ -302,27 +302,32 @@ def stat_detail(filename):
 def snv_detail(filename, stat):
     dic_stat = {0: '', 1: '开始审核', 2: '一审通过', 3: '二审通过', 4: '审核完成'}
     if stat == 1:
+        title = '一审'
         data_k = ['Start', 'Gene.refGene', 'gnomAD_exome_EAS', 'gnomAD_genome_EAS', '1000g2015aug_eas',
                   'esp6500siv2_all']
         df = {
             'status': Snv.query.filter(and_(Snv.Sample_name == filename, Snv.status == dic_stat[stat])).all()
         }
     elif stat == 2:
+        title = '二审'
         data_k = ['Start', 'CIViC', 'OncoKB', 'CKB', 'Clinvar', '历史出现次数']
         df = {
             'status': Snv.query.filter(and_(Snv.Sample_name == filename, Snv.status == dic_stat[stat])).all()
         }
     elif stat == 3:
+        title = '三审'
         data_k = ['Chr', 'Start', 'Gene.refGene', 'p.HGVS', 'c.HGVS', 'exon']
         df = {
             'status': Snv.query.filter(and_(Snv.Sample_name == filename, Snv.status == dic_stat[stat])).all()
         }
     elif stat == 4:
+        title = '结果'
         data_k = ['Chr', 'Start', 'Gene.refGene', 'p.HGVS', 'c.HGVS', 'exon']
         df = {
             'status': Snv.query.filter(and_(Snv.Sample_name == filename, Snv.status == dic_stat[stat])).all()
         }
     elif stat == 0:
+        title = '所有突变'
         data_k = ['Chr', 'Start', 'Gene.refGene', 'p.HGVS', 'c.HGVS', 'exon']
         df = {
             'status': Snv.query.filter(Snv.Sample_name == filename).all()
@@ -353,7 +358,8 @@ def snv_detail(filename, stat):
             db.session.commit()
     list_stat = [0, 4]
 
-    return render_template('detail-snv.html', stat=stat, data_k=data_k, data_v=data_v, **df, list_stat=list_stat)
+    return render_template('detail-snv.html', stat=stat, data_k=data_k,
+                           data_v=data_v, **df, list_stat=list_stat,title=title)
 
 
 @result_bp.route('/detail/cnv/<filename>/', methods=['GET', 'POST'])

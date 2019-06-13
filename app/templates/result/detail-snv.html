@@ -3,6 +3,9 @@
 {% block head %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/result/snv.css') }}">
 {% endblock %}
+{% block button %}
+<div>{{ title }}</div>
+{% endblock %}
 {% block content %}
 {% if stat in list_stat %}
 <div class="mdui-table-fluid">
@@ -77,8 +80,8 @@
             {% endfor %}
             </tbody>
         </table>
-        <input type="submit" name="pass" value="审核通过">
-        <input type="submit" name="npass" value="审核不通过">
+        <input type="submit" name="pass" value="提交">
+        <!--<input type="submit" name="npass" value="审核不通过">-->
     </form>
 </div>
 {% endif %}
