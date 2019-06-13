@@ -191,7 +191,7 @@ class SaveInSql(object):
         res.normal_dp = str(dic_v["normal_dp"])
         res.tumor_af = str(dic_v["tumor_af"])
         res.tumor_dp = str(dic_v["tumor_dp"])
-        # res.history = str(dic_v['历史出现次数'])
+        res.history = str(dic_v['历史出现次数'])
 
     def create_cnv(self, res, dic_v):
         res.Tag = str(dic_v["gene"])
