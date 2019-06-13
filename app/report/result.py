@@ -51,7 +51,7 @@ def index_re():
     if 'pass' in request.form:
         mut_id = request.form.getlist('check')
         for id in mut_id:
-            sta = SampleStat.query.filter(and_(SampleStat.id == id,SampleStat.stat=='未审核'))
+            sta = SampleStat.query.filter(and_(SampleStat.id == id, SampleStat.status == '未审核'))
             if sta.first():
                 sample_name = sta.first().Sample_name
                 sta.update({
@@ -64,7 +64,7 @@ def index_re():
     if 'npass' in request.form:
         mut_id = request.form.getlist('check')
         for id in mut_id:
-            sta = SampleStat.query.filter(and_(SampleStat.id == id,SampleStat.stat=='未审核')).first()
+            sta = SampleStat.query.filter(and_(SampleStat.id == id, SampleStat.status == '未审核')).first()
             if sta:
                 sample_name = sta.Sample_name
                 for sam in Snv.query.filter(Snv.Sample_name == sample_name).all():
@@ -72,9 +72,19 @@ def index_re():
                     db.session.commit()
                 db.session.delete(sta)
                 db.session.commit()
-    df = {
-        'status': SampleStat.query.order_by(SampleStat.id.desc()).all()
-    }
+
+    report_id = (request.url).split('=')[-1] if '=' in request.url else ''
+    if report_id:
+        df = {
+            'status': SampleStat.query.filter(
+                or_(SampleStat.Sample_name == report_id,
+                    SampleStat.Sample_name.endswith(report_id))).order_by(SampleStat.id.desc()).all()
+        }
+    else:
+        df = {
+            'status': SampleStat.query.order_by(SampleStat.id.desc()).all()
+        }
+    print(report_id)
 
     return render_template('index_re.html', form=form, **df, stat=0)
 
@@ -102,11 +112,12 @@ def review_first():
                     'status': '未审核',
                 })
                 db.session.commit()
-                for sam in Snv.query.filter(and_(Snv.Sample_name == sample_name,Snv.status=='开始审核')).all():
+                for sam in Snv.query.filter(and_(Snv.Sample_name == sample_name, Snv.status == '开始审核')).all():
                     sam.status = ''
                     db.session.commit()
 
-    return render_template('review_first.html', **df, stat=1, title='一审', button_name='发送二审',button_name_n='退回上一步')
+    return render_template('review_first.html', **df, stat=1, title='一审',
+                           button_name='发送二审', button_name_n='退回上一步', url_detail='result_bp.review_first')
 
 
 @result_bp.route('/review/second/', methods=['GET', 'POST'])
@@ -132,12 +143,12 @@ def review_second():
                     'status': '开始审核',
                 })
                 db.session.commit()
-                for sam in Snv.query.filter(and_(Snv.Sample_name == sample_name,Snv.status=='一审通过')).all():
+                for sam in Snv.query.filter(and_(Snv.Sample_name == sample_name, Snv.status == '一审通过')).all():
                     sam.status = '开始审核'
                     db.session.commit()
 
     return render_template('review_first.html', **df, stat=2, title='二审',
-                           button_name='发送三审',button_name_n='退回上一步')
+                           button_name='发送三审', button_name_n='退回上一步', url_detail='result_bp.review_second')
 
 
 @result_bp.route('/review/third/', methods=['GET', 'POST'])
@@ -163,11 +174,12 @@ def review_third():
                     'status': '开始二审',
                 })
                 db.session.commit()
-                for sam in Snv.query.filter(and_(Snv.Sample_name == sample_name,Snv.status=='二审通过')).all():
+                for sam in Snv.query.filter(and_(Snv.Sample_name == sample_name, Snv.status == '二审通过')).all():
                     sam.status = '一审通过'
                     db.session.commit()
 
-    return render_template('review_first.html', **df, stat=3, title='三审', button_name='完成审核',button_name_n='退回上一步')
+    return render_template('review_first.html', **df, stat=3, title='三审',
+                           button_name='完成审核', button_name_n='退回上一步', url_detail='result_bp.review_third')
 
 
 @result_bp.route('/result_export/', methods=['GET', 'POST'])
@@ -194,7 +206,7 @@ def result_export():
                     'status': '开始三审',
                 })
                 db.session.commit()
-                for sam in Snv.query.filter(and_(Snv.Sample_name == sample_name,Snv.status=='审核完成')).all():
+                for sam in Snv.query.filter(and_(Snv.Sample_name == sample_name, Snv.status == '审核完成')).all():
                     sam.status = '二审通过'
                     db.session.commit()
 
@@ -253,7 +265,7 @@ def download_re(filename):
 @login_required
 @admin_permission.require(http_exception=403)
 def delate_re(filename):
-    path_file= os.path.join(os.getcwd(),current_app.config['EXPORT_DEST'],filename)
+    path_file = os.path.join(os.getcwd(), current_app.config['EXPORT_DEST'], filename)
     os.remove(path_file)
     return redirect(url_for('.file_manager_re'))
 
@@ -301,7 +313,7 @@ def snv_detail(filename, stat):
             'status': Snv.query.filter(and_(Snv.Sample_name == filename, Snv.status == dic_stat[stat])).all()
         }
     elif stat == 3:
-        data_k =  ['Chr', 'Start', 'Gene.refGene', 'p.HGVS', 'c.HGVS', 'exon']
+        data_k = ['Chr', 'Start', 'Gene.refGene', 'p.HGVS', 'c.HGVS', 'exon']
         df = {
             'status': Snv.query.filter(and_(Snv.Sample_name == filename, Snv.status == dic_stat[stat])).all()
         }

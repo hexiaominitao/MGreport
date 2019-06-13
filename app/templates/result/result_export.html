@@ -3,6 +3,17 @@
 {% block button %}
 <div>导出结果</div>
 {% endblock %}
+{% block search %}
+<div class="mdui-textfield mdui-textfield-expandable mdui-float-right">
+        <button class="mdui-textfield-icon mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">search</i>
+        </button>
+        <form action="{{ url_for('result_bp.result_export') }}">
+            <input class="mdui-textfield-input" type="text" placeholder="Search" name="name_id">
+        </form>
+        <button class="mdui-textfield-close mdui-btn mdui-btn-icon"><i class="mdui-icon material-icons">close</i>
+        </button>
+    </div>
+{% endblock %}
 {% block content %}
 
 <div class="mdui-table-fluid">

@@ -44,9 +44,11 @@ def create_app(config_name):
     from app.report.report import report_bp
     from app.report.user import user_bp
     from app.report.result import result_bp
+    from app.report.admin import admin_bp
 
     app.register_blueprint(report_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(result_bp)
+    app.register_blueprint(admin_bp)
 
     return app
