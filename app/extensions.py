@@ -185,7 +185,7 @@ class SaveInSql(object):
         res.pHGVS = str(dic_v["p.HGVS"])
         res._575_Transcript = str(dic_v["575_Transcript"])
         res.exon = str(dic_v["exon"])
-        res.total_depth = str(dic_v["total depth"])
+        res.total_depth = str(dic_v["total_depth"])
         res.germline_risk = str(dic_v["germline risk"])
         res.normal_af = str(dic_v["normal_af"])
         res.normal_dp = str(dic_v["normal_dp"])
